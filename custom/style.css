@@ -1,0 +1,78 @@
+@charset "utf-8";
+
+/* --- CSS --- */
+/* 画像が流れ続ける */
+.marquee-container {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    /* 横スクロールバーが出ないように追加 */
+    background-color: #f0f0f0;
+    /* 背景色を追加して見やすく */
+    padding: 20px 0;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+        /* translateプロパティの互換性を考慮してtransformを使用 */
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* 画像にホバーすると動きを止めて拡大 */
+.marquee-inner-stop {
+    display: flex;
+    flex-shrink: 0;
+    /* フレックスアイテムが縮まないように設定 */
+    animation: marquee 20s linear infinite;
+}
+
+.marquee-inner-stop img {
+    transition: scale .4s;
+    margin-right: 10px;
+    /* これがないと画像がくっつく */
+    /* プレビュー用に画像のサイズを調整 */
+    height: 200px;
+    width: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* ホバー時の重なり順制御：親要素にhas擬似クラスを使用 */
+.marquee-inner-stop:has(img:hover) {
+    z-index: 2;
+}
+
+.marquee-inner-stop img:hover {
+    scale: 1.1;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    /* 浮き出る演出を追加 */
+}
+
+/* 停止時のクラス */
+.marquee-paused {
+    animation-play-state: paused;
+}
+
+/* 基本スタイル */
+body {
+    padding: 1rem;
+    overflow-x: hidden;
+    font-family: sans-serif;
+    color: #333;
+}
+
+img {
+    display: block;
+}
+
+h2 {
+    margin-top: 3rem;
+    font-size: 1.2rem;
+    color: #555;
+}

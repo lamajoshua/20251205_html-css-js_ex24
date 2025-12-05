@@ -1,0 +1,160 @@
+@charset "utf-8";
+
+/* --- リセット & ベーススタイル --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* --- Marquee コンテナ（外枠） --- */
+.marquee-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+    padding: 40px 0;
+    /* 上下の余白 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    /* 全体にうっすら影 */
+}
+
+/* 左右のフェード効果（グラデーションマスク） */
+.marquee-wrapper::before,
+.marquee-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 150px;
+    /* フェードの幅 */
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    /* 下の画像をクリックできるようにする */
+}
+
+.marquee-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, #fff, transparent);
+}
+
+.marquee-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, #fff, transparent);
+}
+
+/* --- Marquee 本体 --- */
+.marquee-container {
+    display: flex;
+    width: fit-content;
+    /* 中身に合わせて幅を決める */
+}
+
+/* 画像グループ */
+.marquee-group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    animation: scroll-left 40s linear infinite;
+    /* 40秒で一周 */
+}
+
+/* 各アイテム（カード） */
+.image-card {
+    width: 300px;
+    height: 200px;
+    margin: 0 15px;
+    /* 画像間の隙間 */
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+}
+
+.image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* デフォルトはモノクロにする演出 */
+    filter: grayscale(100%);
+    transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+/* --- ホバー時のアニメーション制御 --- */
+
+/* コンテナにホバーしたら、すべてのアニメーションを一時停止 */
+.marquee-wrapper:hover .marquee-group {
+    animation-play-state: paused;
+}
+
+/* 個別のカードにホバーした時のスタイル */
+.image-card:hover {
+    transform: scale(1.1);
+    /* 少し大きく */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    /* 影を濃く */
+    z-index: 10;
+    /* 他の画像より手前に */
+}
+
+.image-card:hover img {
+    filter: grayscale(0%);
+    /* カラーに戻す */
+    transform: scale(1.05);
+    /* 中の画像も少しズーム */
+}
+
+/* --- アニメーション定義 --- */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* --- レスポンシブ対応（スマホ調整） --- */
+@media (max-width: 768px) {
+    .image-card {
+        width: 200px;
+        height: 140px;
+        margin: 0 10px;
+    }
+
+    .marquee-wrapper::before,
+    .marquee-wrapper::after {
+        width: 50px;
+        /* スマホではフェード幅を狭く */
+    }
+}
